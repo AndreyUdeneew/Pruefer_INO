@@ -48,10 +48,10 @@ void loop()
 {
 //  test();
   getTemperature();
-//  Serial.println('R'+String(particleSensor.getRed()));
-//  Serial.println('I'+String(particleSensor.getIR()));
-  Serial.println(particleSensor.getRed());
-  Serial.println(particleSensor.getIR());
+  Serial.println('R'+String(particleSensor.getRed()));
+  Serial.println('I'+String(particleSensor.getIR()));
+//  Serial.println(particleSensor.getRed());
+//  Serial.println(particleSensor.getIR());
 //    colorReatio();
     digitalWrite(A0, HIGH);
     digitalWrite(A0, LOW);
