@@ -6,6 +6,7 @@
 #include <avr/sleep.h>
 int tmpAddress = 0x4A; //Slave Addresses set
 int ResolutionBits = 12;   //Resolution set
+uint32_t i;
 MAX30105 particleSensor;
 #define debug Serial
 
@@ -21,7 +22,7 @@ void setup()
     while (1);
   }
     //Setup to sense up to 18 inches, max LED brightness
-  byte ledBrightness = 0xFF; //Options: 0=Off to 255=50mA
+  byte ledBrightness = 15; //Options: 0=Off to 255=50mA
   byte sampleAverage = 1; //Options: 1, 2, 4, 8, 16, 32
   byte ledMode = 2; //Options: 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green
   int sampleRate = 3200; //Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
@@ -33,17 +34,28 @@ void setup()
   pinMode(A0, OUTPUT);
 }
 
+uint32_t test()
+{
+  Serial.println(i);
+  i+=1;
+  if(i == 65536)
+  {
+    i = 0;
+  }
+}
+
 void loop()
 {
+//  test();
   getTemperature();
-//  Serial.print(", ");
-    colorReatio();
-//  Serial.print(particleSensor.getRed());
-//  Serial.print(", ");
-//  Serial.println(particleSensor.getIR());
+//  Serial.println('R'+String(particleSensor.getRed()));
+//  Serial.println('I'+String(particleSensor.getIR()));
+  Serial.println(particleSensor.getRed());
+  Serial.println(particleSensor.getIR());
+//    colorReatio();
     digitalWrite(A0, HIGH);
     digitalWrite(A0, LOW);
-//  delay(20);
+    delay(5);
 }
 
 float colorReatio()
@@ -61,7 +73,7 @@ float getTemperature()
   int TemperatureSum = ((MSB << 8) | LSB) >> 4;
   float celsius = TemperatureSum*0.0625;
 //  Serial.print("Celsius: ");
-  Serial.println(celsius);
+  Serial.println('T'+String(celsius));
 }
 
 void SetResolution(){
