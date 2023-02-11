@@ -16,22 +16,33 @@ void setup()
   Serial.begin(115200);  // start serial for output
   SetResolution();      // thermal sensor
   // Initialize sensor
-  if (!particleSensor.begin(Wire, I2C_SPEED_FAST))
+
+ 
+
+//  particleSensor.setup(); //Configure sensor. Use 6.4mA for LED drive
+  pinMode(A0, OUTPUT);
+  pinMode(A1, INPUT_PULLUP);
+
+    if (!particleSensor.begin(Wire, I2C_SPEED_FAST))
   {
-    debug.println("MAX30105 was not found. Please check wiring/power. ");
+//    debug.println("MAX30105 was not found. Please check wiring/power. ");
     while (1);
   }
-    //Setup to sense up to 18 inches, max LED brightness
-  byte ledBrightness = 15; //Options: 0=Off to 255=50mA
+  
+     //Setup to sense up to 18 inches, max LED brightness
+  byte ledBrightness = 15; //Options: 0=Off to 255=50mA   //15 ist normal
   byte sampleAverage = 1; //Options: 1, 2, 4, 8, 16, 32
   byte ledMode = 2; //Options: 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green
   int sampleRate = 3200; //Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
   int pulseWidth = 411; //Options: 69, 118, 215, 411
   int adcRange = 16384; //Options: 2048, 4096, 8192, 16384
 
-  particleSensor.setup(ledBrightness, sampleAverage, ledMode, sampleRate, pulseWidth, adcRange); //Configure sensor with these settings
-//  particleSensor.setup(); //Configure sensor. Use 6.4mA for LED drive
-  pinMode(A0, OUTPUT);
+    while(digitalRead(A1) == HIGH)
+  {
+    getTemperature();
+  }
+    particleSensor.setup(ledBrightness, sampleAverage, ledMode, sampleRate, pulseWidth, adcRange); //Configure sensor with these settings
+    delay(500);
 }
 
 uint32_t test()
@@ -74,6 +85,7 @@ float getTemperature()
   float celsius = TemperatureSum*0.0625;
 //  Serial.print("Celsius: ");
   Serial.println('T'+String(celsius));
+//Serial.println('T'+String(TemperatureSum));
 }
 
 void SetResolution(){
